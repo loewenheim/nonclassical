@@ -1,0 +1,73 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{uniinput}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+
+\newcommand{\imp}{\supset}
+\newcommand{\I}{\mathcal{I}}
+\renewcommand{\L}{\mathcal{L}}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+
+\newtheorem{definition}[theorem]{Definition}
+
+\begin{document}
+\section{coNP-completeness of TAUT}
+
+Let $\L$ be a fixed propositional language, i.e. a set of propositional atoms, that does not contain the symbol $F$.
+\begin{definition}
+ Let $φ$ a propositional formula in the language $\L$. We define a translation $'$ into the positive fragment of propositional logic:
+ \begin{enumerate}
+  \item For $φ \equiv A$: φ' $\equiv A$.
+  \item For $φ \equiv \bot$: $φ' \equiv F$.
+  \item For $\circ \in \{∨,∧,\imp\}$ and $φ \equiv ψ_1 \circ ψ_2$: $φ' \equiv ψ_1' \circ ψ_2'$.
+  \item For $φ \equiv ¬ψ$: $φ' \equiv ψ' \imp F$.
+ \end{enumerate}
+\end{definition}
+
+Clearly, the range of $'$ contains no instances of $¬$ or $\bot$.
+
+If $\I$ is an interpretation of $\L$, we can also view it as an interpretation of $L \cup \{F\}$ by letting $\I(F) = \bot$.
+\begin{lemma}
+ Let $\I$ be an interpretation of $\L$ and $φ$ an $\L$-formula.
+ \begin{enumerate}
+  \item If $\I \vDash φ$ then $\I \vDash φ'$.
+  \item If $\I \not\vDash φ$ then $\I \vDash φ \imp F$.
+ \end{enumerate}
+\end{lemma}
+\begin{proof}
+ By induction.
+ \begin{itemize}
+  \item $φ \equiv A$: trivial.
+  \item $φ \equiv \bot$: trivial.
+  \item $φ \equiv ψ_1 ∧ ψ_2$: Assume $\I \vDash φ$. Then $\I \vDash ψ_1$ and $\I \vDash ψ_2$. By induction, $\I \vDash ψ_1'$ and $\I \vDash ψ_2'$ and hence $\I \vDash ψ_1' ∧ ψ_2 \equiv φ'$.
+  
+  Assume $\I \not \vDash φ$. Then $\I \not \vDash ψ_1$ or $\I \not \vDash ψ_2$. Say $\I \not \vDash ψ_1$ w.l.o.g. Then by induction, $\I \vDash ψ_1' \imp F$ and hence $\I \not \vDash (ψ_1' ∧ ψ_2') \imp F \equiv φ' \imp F$.
+  \item $φ \equiv ψ_1 ∨ ψ_2, φ \equiv ψ_1 \imp ψ_2$: Analogous to the previous case.
+  \item $φ \equiv ¬ ψ$: Assume $\I \vDash φ$, then $\I \not \vDash ψ$. By induction $\I \vDash ψ' \imp F \equiv φ'$.
+  
+  On the other hand, if $\I \not \vDash φ$, then $\I \vDash ψ$. By induction, $\I \vDash ψ'$. It follows that $\I vDash (ψ' \imp F) \imp F \equiv φ \imp F$.
+ \end{itemize}
+\end{proof}
+\begin{theorem}
+ $φ$ is tautological iff $φ'$ is tautological.
+\end{theorem}
+\begin{proof}
+ By the lemma, if $φ$ is satisfiable, then so is $φ' ∧ ¬F$ ($\I$ satisfies it). By contraposition, if $φ' \imp F$ is tautological, $φ$ is unsatisfiable.
+\end{proof}
+
+\end{document}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+
+\newtheorem{definition}[theorem]{Definition}

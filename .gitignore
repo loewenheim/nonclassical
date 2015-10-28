@@ -1,0 +1,14 @@
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.pdf
+*.tex.backup
+*.toc
+*.synctex.gz
+*.kate-swp
+*.out
+*.bak
+*.aux
+*.vtc
