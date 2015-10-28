@@ -22,14 +22,18 @@
 
 \newtheorem{definition}[theorem]{Definition}
 
+\title{NCL exercises 1}
+\author{Sebastian Zivota}
+
 \begin{document}
-\section{Exercise 1}
+\maketitle
+\section*{Exercise 1}
 \begin{problem*}
 Explain (in your own words!) the paradoxes of material implication.
 \end{problem*}
 Paradoxes of material implication—at least some of them—result from the fact that the truth of $p \imp q$ is defined solely via the individual truth values of $p$ and $q$ and not any causal or meaningful relationship between them. For instance, since $p \imp q$ is true if $q$ is true, a true proposition is implied by everything, which is counterintuitive. Conversely, a false proposition implies everything, which is just as paradoxical. Combining these two one obtains the tautology $(p \imp q) ∨ (q \imp p)$. If $p$ is false, the first disjunct is true and if $p$ is true, the second one is true. But in natural language, it would be nonsensical to say that between two statements, one always implies the other. The problem is that expressions like ``implies'' or ``if ... then'' carry connotations, like causality and relevance, that material implication does not capture.
 
-\section{Exercise 2}
+\section*{Exercise 2}
 \begin{problem*}
 Consider the following statement
 $S$, that we will assume to be true:
@@ -44,7 +48,8 @@ $S$ by not praying?
 First of all, $S$ can be restated as $(P \imp A) \imp G$ (``If it is true that if I pray to God, then God anwers, then God exists.'') by contraposition. The problem here is that the premise of the outer implication, $P \imp A$, is intended to capture the notion ``God answers my prayers'', or something like it, but it does not precisely achieve that. The two statements diverge in the case of $¬P$, which is of course exactly the problematic case: $(P \imp A)$ becomes true, whereas ``God answers my prayers'' becomes technically true, but essentially meaningless (or even deceptive, depending on the intent of the speaker).
 
 Another way to restate the problem: Suppose I want to convince you that God exists by saying ``God has answered all my prayers, therefore she exists''. This argument seems reasonable on the face of it, but God answering all prayers I say only carries weight if I actually say any. If I've never prayed, this statement remains true, but only vacuously so: hearing me say this sentence, you assume that there is at least one prayer that I have said and God has therefore answered.
-\section{Exercise 4}
+
+\section*{Exercise 4}
 \begin{problem*}
 Show  that  the  satisfiability  problem  for  the  fragment  of  propositional CL without $¬$ and $\bot$ (``positive fragment'') is trivial, whereas the validity problem is still coNP-complete.
 \end{problem*}
