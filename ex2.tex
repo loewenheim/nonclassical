@@ -1,0 +1,62 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{uniinput}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\usepackage{tkz-graph}
+
+\newcommand{\imp}{\supset}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\Ib}{\I_{¬ F}}
+\newcommand{\It}{\I_{F}}
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\Lf}{\L_F}
+\newcommand{\Dia}{\Diamond}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem*{problem*}{Problem}
+
+\theoremstyle{definition}
+
+\newtheorem{definition}[theorem]{Definition}
+
+\title{NCL exercises 2}
+\author{Sebastian Zivota}
+
+\begin{document}
+\maketitle
+
+\section*{Exercise 12}
+
+\begin{problem*}
+For each of the following formulas:
+Find a Kripke model in which the formula is true in some world. Is
+there a Kripke model for the formula?  If not, why?
+(Try to use as few worlds as possible.)
+
+\begin{enumerate}
+ \item $\Dia p ∧ \Dia \Box p ∧ ¬ \Box p$
+ \item $p ∧ \Box p ∧ ¬ \Dia p$
+ \item $(p \imp q) ∧ \Dia (p ∧ ¬q)$
+ \item $¬ p ∧ \Dia \Dia p ∧ ¬ \Box\Dia p ∧ \Dia\Box ¬p$
+ \item $\Dia p ∧ (\Box p \imp \Box\Dia p) ∧ \Box (p \imp ¬\Dia p)$
+\end{enumerate}
+\end{problem*}
+\begin{enumerate}
+ \item $\Dia p ∧ \Dia \Box p ∧ ¬ \Box p$
+      \begin{tikzpicture}
+      \tikzset{EdgeStyle/.append style = {->}}
+        \Vertex{W}
+        \EA(W){V}
+        \Edge(W)(V)
+        \Loop[dir=NO](W.north)
+       \end{tikzpicture}
+
+\end{enumerate}
+
+
+\end{document}
