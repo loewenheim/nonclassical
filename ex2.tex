@@ -5,15 +5,18 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{fullpage}
-\usepackage{tkz-graph}
+\usepackage{gslist}
+\usepackage{gsgraph}
 
 \newcommand{\imp}{\supset}
 \newcommand{\I}{\mathcal{I}}
+\newcommand{\F}{\mathcal{F}}
 \newcommand{\Ib}{\I_{¬ F}}
 \newcommand{\It}{\I_{F}}
 \renewcommand{\L}{\mathcal{L}}
 \newcommand{\Lf}{\L_F}
 \newcommand{\Dia}{\Diamond}
+\newcommand{\M}{\mathcal{M}}
 
 
 \newtheorem{theorem}{Theorem}
@@ -47,16 +50,89 @@ there a Kripke model for the formula?  If not, why?
 \end{enumerate}
 \end{problem*}
 \begin{enumerate}
- \item $\Dia p ∧ \Dia \Box p ∧ ¬ \Box p$
-      \begin{tikzpicture}
-      \tikzset{EdgeStyle/.append style = {->}}
-        \Vertex{W}
-        \EA(W){V}
-        \Edge(W)(V)
-        \Loop[dir=NO](W.north)
-       \end{tikzpicture}
+ \item $φ \equiv \Dia p ∧ \Dia \Box p ∧ ¬ \Box p$
+ 
+ Let $\M = \vcenter{\begin{graph}(0.5,1)(-0.2,-0.5)
+\pos  0=(0,0);1=(1,0).
+%\style edgelabel{close}.
+\style node{plain};nodelabel{0};edgelabel{W}.
+\node 0{$w$};1{$v$}.
+\style nodelabel{SE}.
+\node 1{$p$}.
+\edge 0-0-1.
+\end{graph}}$. Then $(\M, w)\models φ$.
+ 
+ Let $\M$ be any Kripke structure and assume $\M \models φ$. Then both $\Dia \Box p$ and $¬ \Box p$ must hold in every node of the $\M$. But if $(\M, w) \models \Dia \Box p$ there is a $w' \in M$ such that $w R w'$ and $(\M, w') \models \Box p$. This contradicts $(\M, w') \models ¬\Box p$.
+ 
+\item $p ∧ \Box p ∧ ¬ \Dia p$
 
+The structure with a single world in which $p$ holds and no edges satisfies this formula (in its single world and therefore as a whole).
+
+\item $φ \equiv (p \imp q) ∧ \Dia (p ∧ ¬q)$
+
+Let $\M = \vcenter{\begin{graph}(0.5,1)(-0.2,-0.5)
+\pos  0=(0,0);1=(1,0).
+%\style edgelabel{close}.
+\style node{plain};nodelabel{0};edgelabel{W}.
+\node 0{$w$};1{$v$}.
+\style nodelabel{SE}.
+\node 0{$p,q$};1{$p$}.
+\edge 0-1.
+\end{graph}}$. Then $(\M, w)\models φ$.
+
+$φ$ can be written as $ψ ∧ \Dia ¬ ψ$. Similarly to 1), it is unsatisfiable on the level of structures: On the one hand, $ψ$ must hold in every world, but on the other hand, $¬ψ$ must hold in at least one.
+
+\item $φ \equiv ¬ p ∧ \Dia \Dia p ∧ ¬ \Box\Dia p ∧ \Dia\Box ¬p$
+
+$φ$ is equivalent to $¬p ∧ \Dia \Dia p ∧ \Dia ¬ \Dia p$.
+
+ 
+ Let $\M = \vcenter{\begin{graph}(0.5,1)(-0.2,-0.5)
+\pos  0=(0,0);1=(1,0);2=(2,0).
+%\style edgelabel{close}.
+\style node{plain};nodelabel{0};edgelabel{W}.
+\node 0{$w$};1{$v$}.
+\style nodelabel{SE}.
+\node 1{$p$}.
+\edge 0-0-1.
+\end{graph}}$. Then $(\M, w)\models φ$: $\Dia \Dia p$ holds at $w$ because $p$ holds at $v$; $\Dia ¬ \Dia p$ holds at $w$ because $v$ has no successors.
+
+$φ$ cannot have a model because $¬p$ would have to hold in every world and $p$ would have to hold in some worlds.
+
+ \item $φ \equiv \Dia p ∧ (\Box p \imp \Box\Dia p) ∧ \Box (p \imp ¬\Dia p)$
+
+ Let $\M = \vcenter{\begin{graph}(0.5,1)(-0.2,-0.5)
+\pos  0=(0,0);1=(1,0);2=(2,0).
+%\style edgelabel{close}.
+\style node{plain};nodelabel{0};edgelabel{W}.
+\node 0{$w$};1{$v$}.
+\style nodelabel{SE}.
+\node 1{$p$}.
+\edge 0-0-1.
+\end{graph}}$. Then $(\M, w)\models φ$: $\Dia p$ is true at $w$ because $p$ is true at $v$; $\Box p \imp \Box\Dia p$ is true because the premise is false; $\Box (p \imp ¬\Dia p)$ is true because the only successor world of $w$ that satisfies $p$ (namely $v$) also satisfies $¬\Dia p$.
+
+$φ$ is unsatisfiable: Assume $\M \models φ$ and $w \in M$. Since $(\M, w) \models \Dia p$, there is a $w' \in M$ such that $w R w'$ and $(\M, w') \models p$. But since $(\M, w) \models \Box (p \imp ¬\Dia p)$, it follows that $(\M, w') \models ¬ Dia p$ and hence $\Dia p$ is not satisfied at every world.
 \end{enumerate}
 
+\section*{Exercise 13}
+\begin{problem*}
+Consider the graph $\F$:
+\begin{align*}
+\begin{graph}(2,0.5)(0,0)
+\pos  0=(0,0);1=(1,0).
+%\style edgelabel{close}.
+\style node{plain};nodelabel{0}.
+\node 0{w};1{u}.
+\edge 0-0-1-1-0.
+\end{graph}
+\end{align*}
+Find  3--5  further  examples  of  modal  formulas  with  one  schematic variable  that  are  valid  in $\F$, above, such that removal  of  some (which?)  accessibilities leads to invalidity.
+\end{problem*}
+
+\begin{enumerate}
+ \item $\Box A \imp \Dia A$ is valid, but becomes invalid if, for instance, both edges originating from $w$ are removed: then $\Box A$ is vacuously true at $w$, but $\Dia A$ is false.
+ \item Similarly, if $φ$ is any tautology, $\Dia φ$ is valid in $\F$ but becomes invalid if all edges originating from one of the nodes are removed.
+ 
+\end{enumerate}
 
 \end{document}

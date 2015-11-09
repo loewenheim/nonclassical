@@ -1,0 +1,441 @@
+\documentclass[handout]{beamer}
+%\documentclass{beamer}
+\usepackage[latin1]{inputenc}
+\usepackage{proof}
+%\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{gslist}
+\usepackage{gsgraph}
+%\usepackage{pstricks}
+\usepackage{ncl}
+
+\def\N{{\mathbb N}}
+\def\ee{\doteq}
+\def\lee{\lessdot}
+\definecolor{darkgreen}{rgb}{0,.3,0}
+\definecolor{darkred}{rgb}{.5,0,0}
+\definecolor{darkblue}{rgb}{0,0,.7}
+\definecolor{darkvio}{rgb}{.5,0,.5}
+\definecolor{itemblue}{rgb}{0,0,.4}
+
+\renewcommand{\emph}[1]{{\color{blue} #1}}
+\newcommand{\empha}[1]{{\color{darkgreen} #1}}
+\newcommand{\emphb}[1]{{\color{darkvio} #1}}
+\renewcommand{\em}[1]{{\color{darkblue} #1}}
+\newcommand{\deem}[1]{{\color{itemblue} #1}}
+
+\newcommand{\headline}[1]{{\color{blue} \Large\sffamily\bfseries#1}\par}
+\newcommand{\smallhead}[1]{{\color{blue} \large\sffamily\bfseries#1}}
+\newcommand\para[1]{{\sffamily\bfseries#1}}
+%\newcommand\labelitemi{\mbox{$\diamond$}}
+\newcounter{exn}
+\begin{document}
+
+\setcounter{exn}{10}
+
+
+\title{\em{\huge Nonclassical logics}\\
+      \em{\huge = `Modal and Epistemic Logic'}\\
+       VU 185.249 (lecture + exercises)}
+\author{\fbox{\tt http://www.logic.at/lvas/ncl/}}
+\institute{Chris Ferm\"uller\\
+  Technische Universit\"at Wien\\
+  \texttt{www.logic.at/people/chrisf/}
+}
+\date{Winter term 2015/16\\[2ex]
+\empha{Lecture 2}}
+\frame<1-| handout:0>{\titlepage}
+%%%%%%%%%%%%%%%
+
+\frame{
+
+\headline{Modal logics}
+
+\empha{Remark:}\\
+Like CL (classical logic), modal logics comes in \em{levels/orders}.\\
+We will concentrate on \em{propositional} modal logics.
+
+\vspace{1ex}
+\pause
+\deem{Syntax:}
+ \bit
+  \item additional unary connective(s):\\
+        \em{modal operator}~\n{} (`box')\\
+        and the dual operator~\p{} (`diamond'):\ \ 
+        $ \p =_{def} \neg \n \neg $
+\pause
+  \item inductive definition of formulas ($\FORM$) as usual.
+\eit
+
+\pause
+Later we will extend this to \em{multi-modal logics}:
+\bit
+\pause
+\item E.g.,  $K_1, K_2, \ldots, K_n, S_G, D_G, E_G$ 
+  will all serve as (unary) \em{modal operators} of a 
+  single \em{epistemic logic}
+\pause
+\item other important multi-modal logics: 
+    \bit 
+    \item \em{temporal logics:} (unary and binary) operators 
+           refer to past/future (time points)
+%\pause
+    \item \em{dynamic logic:} each program is a modal
+          operator!
+    \eit
+\eit 
+}
+
+%%%%%%%%%%%%%
+\frame{
+\smallhead{Intended semantics}\\[0.5ex]
+
+\ul{Modal} operators refer to a \em{\ul{mode} of assertion}:\\[1ex]
+
+\pause
+
+\begin{tabular}{|p{30ex}|p{30ex}|}
+\hline
+\empha{Meaning of $\n F$}      &     \empha{Meaning of $\p F (=\neg\n\neg F) $} \\[0.45ex]
+\hline\hline
+\em{necessarily} $F$            &  \pause  \em{possibly} $F$ \\[0.45ex]
+\hline  \pause 
+\em{always} $F$     &  \pause  \em{sometimes}~$F$  \\[0.45ex]
+\hline  \pause 
+$F$ \em{should be} the case      &  \pause  $F$ is \em{permitted}\\[0.45ex]
+\hline \pause 
+
+(an agent) \em{knows} that $F$      &  \pause (an agent) deems $F$ \em{consistent with what is known} to 
+                                     her/him\\[0.45ex]
+\hline  \pause 
+(an agent) \em{believes} that $F$    &  \pause  (an agent) \em{deems} $F$ \em{possible}\\[0.45ex]
+\hline  \pause 
+$F$ is \em{provable}               &  \pause $F$ is \em{not refutable}\\[0.45ex]
+\hline  \pause 
+$F$ holds \em{at every  terminating state} of
+a process/program  &  \pause $F$ holds \em{at some terminating state} of a
+process/program \\[0.45ex]
+\hline
+\end{tabular}
+}
+
+%%%%%%%%%%%%%%%%%%
+\frame{
+\smallhead{Possible world semantics}\\[1ex]
+
+\empha{Example:} Reasoning about databases\\
+\bit
+\item Formulas $F$ are built up from atoms $P(t_1, \ldots, t_n)$,
+      where \em{ground atoms}  are \em{entries in a database}.
+\pause
+\item CL-formulas $F$ thus correspond to \em{queries},
+      but may also be used to formulate \em{integrity constraints},
+      i.e., formulas that have to hold in \em{every instance} of
+      a database.
+\pause
+\item To \em{express} that $F$ is an \em{integrity constraint} 
+      (and not just a formula holding in the current instance
+      of the database, or just a valid formula) we have
+      to extend CL:\\
+      $\n F$ \dots $F$ is an integrity constraint
+\pause
+\item To extend (Tarski's) semantics for CL to the evaluation
+      of statements like $\n F$, we have to refer to all
+      \em{possible states} of a database.
+\eit
+
+\pause
+
+\empha{Similar examples:}\\
+(physically) necessary $\longrightarrow$ 
+   (physically) possible states of the world\\
+always $\longrightarrow$ system states at arbitrary time points\\
+\pause
+\em{etc. [check previous slide!]}
+
+}
+%%%%%%%%%%%%%%%
+%%%%%%%% 2nd COPY - NOT ON HANDOUT
+\frame<1-| handout:0>{
+\smallhead{Intended semantics}\\[1ex]
+
+Modal operators refer to a \em{mode of assertion}:\\[1ex]
+
+\begin{tabular}{|p{30ex}|p{30ex}|}
+\hline
+\empha{Meaning of $\n F$}      &     \empha{Meaning of $\p F (=\neg\n\neg F) $} \\[0.45ex]
+\hline\hline
+\em{necessarily} $F$            &  \em{possibly} $F$ \\[0.45ex]
+\hline 
+\em{always} $F$     &  \em{sometimes}~$F$  \\[0.45ex]
+\hline  
+$F$ \em{should be} the case      &   $F$ is \em{permitted}\\[0.45ex]
+\hline 
+(an agent) \em{knows} that $F$      &   (an agent) deems $F$ \em{consistent with what is known} to 
+                                     her/him\\[0.45ex]
+\hline  
+(an agent) \em{believes} that $F$    &  (an agent) \em{deems} $F$ \em{possible}\\[0.45ex]
+\hline  
+$F$ is \em{provable}               &  $F$ is \em{not refutable}\\[0.45ex]
+\hline  
+$F$ holds \em{at every  terminating state} of
+a process/program  &   $F$ holds \em{at some terminating state} of a
+process/program \\[0.45ex]
+\hline
+\end{tabular}
+}
+%%%%%%%% 
+%%%%%%%%%%%%%%%
+
+\frame{
+\smallhead{(Formal) possible world semantics:\\ \pause
+           Kripke semantics}\\[1ex]
+\pause
+\empha{Note:} We only treat \em{propositional} modal logics, here.\\[1ex]
+\pause
+
+A \em{Kripke interpretation (model)} is a tuple $\M = \langle W,R,V\rangle$
+where:
+\pause
+\begin{itemize}
+\item non-empty set $W$ of \em{(possible) worlds} (states, points)
+\pause
+\item an \em{accessibility relation} $R \subseteq W \times W$
+\pause 
+\item \em{(variable) assignment} $V : (\PV \times W) \mapsto \{\t,\f\}$\\
+      (alternatively:  $V': \PV \mapsto 2^W$ or $V'':W \mapsto 2^{\PV}$)
+\end{itemize}
+
+\pause
+Formulas without $\n$ are evaluated as usual (\em{in each world}), e.g.:
+\[
+v_\M(F \And G,w) = \left\{ \begin{array}{r@{\quad}l}
+                        \t  & \mbox{ if } v_\M(F,w) = \t \\ 
+                            & \mbox{ and } v_\M(G,w) = \t  \\
+                        \f  & \mbox{ otherwise } 
+                            \end{array}
+                   \right.
+\]
+\pause
+\empha{New:}\\[-4ex]
+\[
+v_\M(\n F,w) = \left\{ \begin{array}{r@{\quad}l}
+                        \t  & \mbox{ if } \forall u\, wRu
+                                          \Rightarrow v_\M(F,u) = \t \\ 
+                        \f  & \mbox{ otherwise } 
+                            \end{array}
+                   \right.
+\]
+}
+%%%%%%%%%%%%%%%
+\frame{
+\smallhead{Kripke semantics (ctd.) }\\[1ex]
+
+Since $\p = \neg \n \neg$ we obtain:\\[-2ex]
+\[
+v_\M(\p A,w) = \left\{ \begin{array}{r@{\quad}l}
+                        \t  & \mbox{ if } \exists u\, wRu
+                                          \mbox{ and } v_\M(A,u) = \t \\ 
+                        \f  & \mbox{ otherwise } 
+                            \end{array}
+                   \right.
+\]
+\pause
+\UEl{Derive the above (in detail) from  $\p = \neg \n \neg$
+and from  the defining\\ conditions of the semantics for $\n F$ and for $\neg F$.}
+
+\vspace*{1ex}
+
+\pause
+\empha{Alternative  notation} for $ v_{\M}(A,w) = \t $:\
+ \ $ (\M,w) \models A$\\
+\em{Read:} `$A$ holds at state/point/world $w$ (in $\M$)'\\
+\hspace*{3ex}\em{or:} `$A$ is satisfied at state/point/world $w$ (in $\M$)'\\
+\hspace*{3ex}\em{or:} `$A$ is forced at state/point/world $w$ (in $\M$)'\\
+\hspace*{3ex}\em{or:} `$A$ is true at state/point/world $w$ (in $\M$)'\\[1ex]
+\pause
+
+\pause
+$A$ is \em{true in interpretation (model)}
+ $\M = \langle W,R,V\rangle$  if $v_\M(A,w) = \t$ for all $w \in W$.\\
+\empha{Notation:} $\M \models A$\\[1ex]
+
+\pause
+The pair  $\langle W,R \rangle$ of an interpretation
+ $\M = \langle W,R,V\rangle$\\ is called the \em{(Kripke) frame} 
+on which~$\M$ is \em{based}.
+
+}
+%%%%%%%%%%%%%%%
+\frame{
+\smallhead{\ul{Four} levels of `truth' in Kripke semantics}
+
+\ben
+\item \em{Truth at a world:} $ (\M,w) \models A$
+\pause
+\item \em{Truth in a model:} $\M \models A$.
+\pause
+\item \em{Validity (truth) in a frame:} \\
+$A$ is \em{valid in frame}
+ $\F = \langle W,R\rangle$  if $A$ is true in all interpretations
+based on $\F$.\\
+ \empha{Notation:} $\F \models A$
+\pause
+\item \em{Validity (truth) in a class of frames:}\\
+  If $\Psi$ is a class (set) of frames we say that $A$ is
+  \em{true in $\Psi$} if $\F \models A$ for all $\F \in \Psi$.
+\een
+
+\empha{Note:}\\
+A modal \em{logic} does not refer to a particular frame,
+but to a \em{class of frames} determined by some \em{property of
+the accessibility relations}.
+
+}
+%%%%%%%%%%%%%%%
+\frame{
+\smallhead{Evaluation in a Kripke interpretation --- Example}\\[1ex]
+
+$\M = \langle \{0,1,2,3,4\},R,V\rangle$:
+\renewcommand\ggrid{4000}
+\renewcommand\gunitlength{0.0045mm}
+%\fbox{%
+\hspace*{10ex}\begin{graph}(4.2,2)(-0.5,-1.5)
+\pos  c=({0.5},-1);d=({0.5},{-0.5}).
+\pos  0=(0,0);1=(1,0);2=(1,-1);3=(2,0);4=(3,0).
+%\style edgelabel{close}.
+\style node{plain};nodelabel{0};edgelabel{W}.
+\node 0{0};1{1};2{2};3{3};4{4}.
+\style nodelabel{SE}.
+\node 0{$q$};1{$p$};2{$p,q$};3{$q$};4{$p,q$}.
+\edge 0-1-2-c-d-1-3-3-4.
+\end{graph}%
+
+Evaluate the following formulas in different worlds in $\M$:\\[1ex]
+1. $p \Impl q$, $q \Impl p$, $p \Or q$, $p \Or \neg p$\\
+2. $\p p$, $\n p$, $\p q$, $\n q$, $\p \neg q$,  $\n \neg q$\\
+3. $\n (p \Or q)$, $\p (p \Or q)$, $\p (p \Impl q)$, 
+   $\p (p \And \neg p)$, $\n (p \Or \neg p)$\\
+4. $\n p \Or \n \neg p$, $\n p \Impl \p p$, $\neg \p p \Impl \n p$, 
+   $\n q \Impl q$, $p \Or \p p$\\
+5. $\p \n p$, $\n \p q$, $\p \p p$, $\n \n p \Impl \n p$, 
+         $\n \n q \Impl \n q$, $\n p \Impl \n \n p$ \\
+6. $\p(p \And q) \Impl \p p$, $\p \neg q \Impl \neg \n q$,
+   $\n (p \And q) \Impl (\n p \And \n q)$
+}
+%%%%%%%%%%%%%%%
+\frame{
+\UEl{
+For the formulas of lines 1--6 of the last slide:\\
+In which worlds of  the following 
+interpretation\\
+$\M = \langle \{0,1,2,3\},R,V\rangle$ is the corresponding formula true?\\
+\renewcommand\ggrid{6000}
+\renewcommand\gunitlength{0.0045mm}
+%\fbox{%
+\hspace*{4ex}\begin{graph}(4.2,2.4)(-0.5,-1.5)
+\pos  c=(0,{0.5});d=({2},{0.5}).
+\pos  0=(0,0);1=(1,0);2=(1,-1);3=(2,0).
+%\style edgelabel{close}.
+\style node{plain};nodelabel{0};edgelabel{W}.
+\node 0{0};1{1};2{2};3{3}.
+\style nodelabel{SE}.
+\node 1{$q$};2{$p,q$};3{$p,q$}.
+\edge 0-c-d-3.
+\edge 0-1-3.
+\edge 1-1-2.
+\edge 0-2.
+\end{graph}%
+}
+}
+%%%%%%%
+\frame{
+
+\em{The following homework is compulsory:}
+
+\vspace{1ex}
+   
+\UEl{For each of the following formulas:\\
+Find a Kripke model in which the formula
+is true in some world. Is there a  Kripke model for the formula?
+% (I.e., can it be true in all worlds?)  
+If not, why? \\ (Try to use as few worlds as possible.)
+\bit
+\item $\p p \And \p \n p \And \neg \n p$ 
+\item $p \And \n p \And \neg \p p$
+\item $(p \Impl q) \And \p (p \And \neg q)$
+\item $\neg p \And \p\p p \And \neg \n\p p \And \p\n \neg p$
+\item $\p p \And (\n p \Impl \n\p p) \And \n(p \Impl \neg \p p)$ 
+\eit
+}}
+%%%%%%%%%%%%%
+\frame<1-| handout:0>{
+\smallhead{\ul{Four} levels of `truth' in Kripke semantics}
+
+\ben
+\item \em{Truth at a world:} $ (\M,w) \models A$
+\item \em{Truth in a model:} $\M \models A$.
+\item \em{Validity (truth) in a frame:} \\
+$A$ is \em{valid in frame}
+ $\F = \langle W,R\rangle$  if $A$ is true in all interpretations
+based on $\F$.\\
+ \empha{Notation:} $\F \models A$
+\item \em{Validity (truth) in a class of frames:}\\
+  If $\Psi$ is a class (set) of frames we say that $A$ is
+  \em{true in $\Psi$} if $\F \models A$ for all $\F \in \Psi$.
+\een
+
+\empha{Note:}\\
+A modal \em{logic} does not refer to a particular frame,
+but to a \em{class of frames} determined by some \em{property of
+the accessibility relations}.
+
+}
+
+%%%%%%%%%%%%%%%
+
+\frame{
+\smallhead{Validity in frames}\\[1ex]
+
+Consider the frame $\F = \langle \{w,u\},R\rangle$, where $R=W \times W$:\\
+\renewcommand\ggrid{6000}
+\renewcommand\gunitlength{0.0045mm}
+
+\hspace*{4ex}
+\begin{graph}(2,0.5)(0,0)
+\pos  0=(0,0);1=(1,0).
+%\style edgelabel{close}.
+\style node{plain};nodelabel{0}.
+\node 0{w};1{u}.
+\edge 0-0-1-1-0.
+\end{graph}
+\vspace{2ex}
+
+The following formulas (\em{schemata}) are valid in $\F$: \pause
+\bit
+\item $A \Impl \p A$ \pause --- not valid without $R(w,w)$ or $R(u,u)$. 
+\pause
+\item $\p (A \Impl  A)$ \pause 
+--- not valid without, e.g., $R(w,w)$ and $R(w,u)$.
+\eit
+\vspace{0.5ex}
+
+\em{Compulsory homework:}\\[0.5ex]
+\pause
+\UEl{Find 3-5 further examples of modal formulas with one schematic
+variable that are valid in $\F$, above, such that removal of some (which?)
+accessibilities leads to invalidity.}
+\pause
+
+\vspace{0.5ex}
+\empha{Note:}\\
+\em{Modal logics} usually do not refer to just a particular frame,
+but to whole  \em{classes of frames}, that are determined by  \em{properties of
+the accessibility relation}.
+
+}
+%%%%%%%%
+
+
+\end{document}
+

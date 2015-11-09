@@ -1,0 +1,506 @@
+% Sat Dec 17 18:47:13 CET 2005
+
+\ProvidesPackage{gsgraph}[2005/12/17]
+\RequirePackage{gslist}
+
+\newcommand\gunitlength{0.0025mm}
+\newcommand\ggrid{8000}
+\newcommand\defaultstyle
+   {\style node{plain};nodelabel{0}.
+    \style loop{Nc}.
+    \style edgelabel{E};edgelabel{N};edgelabel{center}.
+    \style edge{directed}.
+   }
+
+\newcount\g@ax
+\newcount\g@ay
+\newcount\g@bx
+\newcount\g@by
+\newcount\g@cx
+\newcount\g@cy
+\newcount\g@dx
+\newcount\g@dy
+\newcount\g@pa
+\newcount\g@pb
+\newcount\g@pc
+\newdimen\g@dima
+
+\newenvironment{graph}%
+   {\begingroup
+    \providelist\pos{\g@addrel@nd\g@pos@}{}{;}{.}{}%
+    \providelist\style{\g@addrel@nd\g@setstyle}{}{;}{.}{}%
+    \providelist\node{\g@addrel@nd\g@drawnode}{}{;}{.}{}%
+    \providelist\edge{\g@addrelrel@nd\g@drawpolyedge}{}{;}{.}{}%
+    \unitlength=\gunitlength
+    \unitlength=\ggrid\unitlength
+    \def\g@poses{}%
+    \def\g@nodes{}%
+    \defaultstyle
+    \begin{picture}%
+   }%
+   {\end{picture}%
+    \endgroup
+   }
+
+\def\g@pos@#1=(#2,#3)#4\g@nd
+   {\g@posdef #1.x={#2}%
+    \g@posdef #1.y={#3}%
+    \rightappenditem#1\to\g@poses
+   }
+\def\g@posdef#1.#2=#3%
+   {\g@dima =\ggrid sp%
+    \g@dima =#3\g@dima
+    \g@ax   =\g@dima
+    \expandafter\edef\csname pos.#1.#2\endcsname{\the\g@ax}%
+   }
+\def\g@posuse#1.#2{\csname pos.#1.#2\endcsname}
+
+\def\g@setstyle#1#{\g@setstyle@{#1}}
+\def\g@setstyle@#1#2#3\g@nd{\g@styleuse{#1}{#2}}
+\def\g@styledef#1#2#3{\expandafter\def\csname style@#1@#2\endcsname{#3}}
+\def\g@styleuse#1#2{\csname style@#1@#2\endcsname}
+
+\def\g@drawnode#1#{\g@drawnode@{#1}}
+\def\g@drawnode@#1#2#3\g@nd
+   {\rightappenditem#1\to\g@nodes
+    \g@putnode{#1}%
+    \def\g@tmp{#2}%
+    \ifx\g@tmp\g@empty
+    \else
+       \g@putnodelabel{#1}{#2}%
+    \fi
+   }
+\def\g@putnodelabel#1#2%
+   {\g@ax=\g@posuse#1.x%
+    \g@ay=\g@posuse#1.y%
+    \advance\g@ax\g@nloffx
+    \advance\g@ay\g@nloffy
+    \g@putlabel(\g@ax,\g@ay)[\g@nlpos]{#2}%
+   }
+
+\def\g@putlabel(#1,#2)[#3]#4%
+   {\edef\g@tmp{#3}%
+    \expandafter\g@putlabel@\expandafter{\g@tmp}{#4}{#1}{#2}%
+   }
+\def\g@putlabel@#1#2#3#4%
+   {\g@put(#3,#4){\makebox(0,0)[#1]{#2}}%
+   }
+
+\def\g@drawpolyedge
+   {\let\g@next\g@empty
+    \let\g@nextlabel\g@empty
+    \g@drawpolyedge@
+   }
+\newlist\g@drawpolyedge@{\g@addrel@nd\g@drawedge}{}{-}{\g@nd}{}
+
+\def\g@drawedge#1#{\g@drawedge@{#1}}
+\def\g@drawedge@#1#2#3\g@nd%
+   {\let\g@last\g@this
+    \let\g@this\g@next
+    \let\g@thislabel\g@nextlabel
+    \def\g@next{#1}%
+    \def\g@nextlabel{#2}%
+    \ifx\g@this\g@empty
+    \else\ifx\g@last\g@empty
+       \expandafter\ismember\g@this\of\g@nodes
+    \else
+       \g@ax=\g@posuse\g@last.x%
+       \g@ay=\g@posuse\g@last.y%
+       \g@bx=\g@posuse\g@this.x%
+       \g@by=\g@posuse\g@this.y%
+       \advance\g@bx-\g@ax
+       \advance\g@by-\g@ay
+       \g@gcd\g@bx\g@by
+       \ifnum\g@pa=0%
+          \g@putloop
+          \ifx\g@empty\g@thislabel
+          \else
+             \g@putlooplabel
+          \fi
+       \else
+          \g@putedge
+          \ifx\g@empty\g@thislabel
+          \else
+             \g@putedgelabel
+          \fi
+       \fi
+    \fi\fi
+   }
+
+\def\g@putedge
+   {\divide\g@bx by\g@pa
+    \divide\g@by by\g@pa
+    \g@cosine\g@bx\g@by
+    \g@cx=\g@pa
+    \g@sine\g@bx\g@by
+    \g@cy=\g@pa
+    \ifmember
+       \advance\g@ax by\g@cx
+       \advance\g@ay by\g@cy
+    \fi
+    \expandafter\ismember\g@this\of\g@nodes
+    \ifmember
+       \let\g@linvec\g@endedge
+    \else
+       \let\g@linvec\line
+       \ifx\g@next\g@empty
+       \else
+          \g@dx=\g@posuse\g@next.x%
+          \g@dy=\g@posuse\g@next.y%
+          \advance\g@dx by -\g@posuse\g@this.x%
+          \advance\g@dy by -\g@posuse\g@this.y%
+          \g@gcd\g@dx\g@dy
+          \ifnum\g@pa=0
+          \else
+             \divide\g@dx by\g@pa
+             \divide\g@dy by\g@pa
+             \expandafter\ifx
+                \csname join(\the\g@bx,\the\g@by)(\the\g@dx,\the\g@dy)\endcsname
+                \relax
+             \else
+                \membertrue
+                \g@put(\g@posuse\g@this.x,\g@posuse\g@this.y)%
+                   {\csname join(\the\g@bx,\the\g@by)(\the\g@dx,\the\g@dy)\endcsname}%
+             \fi
+          \fi
+       \fi
+    \fi
+    \ifmember
+       \g@cx=-\g@cx
+       \g@cy=-\g@cy
+    \else
+       \g@cx=0
+       \g@cy=0
+    \fi
+    \advance\g@cx by\g@posuse\g@this.x%
+    \advance\g@cy by\g@posuse\g@this.y%
+    \advance\g@cx by-\g@ax
+    \advance\g@cy by-\g@ay
+    \ifnum\g@cx=0
+       \g@abs\g@cy
+       \g@cx=\g@pa
+    \else
+       \g@abs\g@cx
+       \g@cx=\g@pa
+    \fi
+    \g@put(\g@ax,\g@ay){\g@linvec(\g@bx,\g@by){\g@cx}}%
+   }
+
+\def\g@putedgelabel
+   {\g@ax=\g@posuse\g@last.x%
+    \g@ay=\g@posuse\g@last.y%
+    \g@dx=\g@posuse\g@this.x%
+    \g@dy=\g@posuse\g@this.y%
+    \advance\g@dx by -\g@ax
+    \advance\g@dy by -\g@ay
+    \multiply\g@dx by\g@edgelabelnum
+    \multiply\g@dy by\g@edgelabelnum
+    \divide\g@dx by\g@edgelabeldenom
+    \divide\g@dy by\g@edgelabeldenom
+    \advance\g@ax\g@dx
+    \advance\g@ay\g@dy
+    \g@abs\g@bx
+    \g@bx=\g@pa
+    \g@abs\g@by
+    \g@by=\g@pa
+    \ifnum\g@by=0
+       \let\g@elpos\g@elhpos
+       \advance\g@ay by\g@elhsign\g@txtoffuse(\the\g@bx,\the\g@by)%
+    \else
+       \let\g@elpos\g@elvpos
+       \advance\g@ax by\g@elvsign\g@txtoffuse(\the\g@bx,\the\g@by)%
+    \fi
+    \g@putlabel(\g@ax,\g@ay)[\g@elpos]{\g@thislabel}%
+   }
+
+\def\g@putloop
+   {\advance\g@ax\g@lpoffx
+    \advance\g@ay\g@lpoffy
+    \g@put(\g@ax,\g@ay){\oval(\g@lpwidth,\g@lpheight)[\g@lppart]}%
+    \advance\g@ax\g@lpvoffx
+    \advance\g@ay\g@lpvoffy
+    \g@put(\g@ax,\g@ay){\g@endedge(\g@lpvdirx,\g@lpvdiry){0}}%
+   }
+
+\def\g@putlooplabel
+   {\g@ax=\g@posuse\g@this.x%
+    \g@ay=\g@posuse\g@this.y%
+    \advance\g@ax\g@lpoffx
+    \advance\g@ay\g@lpoffy
+    \advance\g@ax\g@lptoffx
+    \advance\g@ay\g@lptoffy
+    \g@putlabel(\g@ax,\g@ay)[\g@lptpos]{\g@thislabel}%
+   }
+
+\def\g@addrel@nd#1#2{#1#2{\relax}\g@nd}
+\def\g@addrelrel@nd#1#2{#1#2-\relax-\relax\g@nd}
+\def\g@empty{\relax}%
+
+\def\g@circlea{2000}
+\def\g@circleb{1900}
+\def\g@circlec{1800}
+\def\g@circled{1600}
+\def\g@putnodeempty#1%
+   {\relax}
+\def\g@putnodeplain#1%
+   {\g@put(\g@posuse#1.x,\g@posuse#1.y){\circle{\g@circlea}}%
+   }
+\def\g@putnodetwin#1%
+   {\g@put(\g@posuse#1.x,\g@posuse#1.y){\circle{\g@circlea}}%
+    \g@put(\g@posuse#1.x,\g@posuse#1.y){\circle{\g@circled}}%
+   }
+\def\g@putnodebold#1%
+   {\thicklines
+    \g@put(\g@posuse#1.x,\g@posuse#1.y){\circle{\g@circlea}}%
+    \g@put(\g@posuse#1.x,\g@posuse#1.y){\circle{\g@circleb}}%
+    \g@put(\g@posuse#1.x,\g@posuse#1.y){\circle{\g@circlec}}%
+    \thinlines
+   }
+\def\g@putnodeboldtwin#1%
+   {\thicklines
+    \g@put(\g@posuse#1.x,\g@posuse#1.y){\circle{\g@circlea}}%
+    \g@put(\g@posuse#1.x,\g@posuse#1.y){\circle{\g@circled}}%
+    \thinlines
+   }
+\def\g@putnodefull#1%
+   {\g@put(\g@posuse#1.x,\g@posuse#1.y){\circle*{\g@circlea}}%
+   }
+\def\g@putnodefulltwin#1%
+   {\g@put(\g@posuse#1.x,\g@posuse#1.y){\circle{\g@circlea}}%
+    \g@put(\g@posuse#1.x,\g@posuse#1.y){\circle*{\g@circled}}%
+   }
+
+\def\g@sgn#1%
+   {\g@pa=#1
+    \ifnum\g@pa<0%
+      \g@pa=-1%
+    \else\ifnum\g@pa>0%
+      \g@pa=1%
+    \else
+      \g@pa=0%
+    \fi\fi
+   }
+
+\def\g@abs#1%
+   {\g@sgn{#1}%
+    \multiply\g@pa by#1%
+   }
+
+\def\g@gcd#1#2%
+   {\g@abs{#2}%
+    \g@pb=\g@pa
+    \g@abs{#1}%
+    \g@@gcd
+   }
+\def\g@@gcd
+   {\ifnum\g@pa<\g@pb
+       \g@pc=\g@pa
+       \g@pa=\g@pb
+       \g@pb=\g@pc
+    \fi
+    \ifnum\g@pb>0
+       \advance\g@pa by-\g@pb
+       \let\next\g@@gcd
+    \else
+       \let\next\relax
+    \fi
+    \next
+   }
+
+\def\g@sine#1#2%
+   {\g@abs{#2}%
+    \g@pb=\g@pa
+    \g@abs{#1}%
+    \g@pa=\ifnum#2<0-\fi\g@sinuse(\the\g@pa,\the\g@pb)%
+    \relax
+   }
+
+\def\g@cosine#1#2%
+   {\g@abs{#2}%
+    \g@pb=\g@pa
+    \g@abs{#1}%
+    \g@pa=\ifnum#1<0-\fi\g@sinuse(\the\g@pb,\the\g@pa)%
+    \relax
+   }
+
+\def\g@sindef(#1,#2)=#3%
+   {\expandafter\def\csname sin(#1,#2)\endcsname{#3}}
+\def\g@sinuse(#1,#2)%
+   {\csname sin(#1,#2)\endcsname}
+
+\g@sindef(0,1)={1000}
+\g@sindef(1,4)={970}
+\g@sindef(1,3)={949}
+\g@sindef(1,2)={894}
+\g@sindef(2,3)={832}
+\g@sindef(3,4)={800}
+\g@sindef(1,1)={707}
+\g@sindef(4,3)={600}
+\g@sindef(3,2)={555}
+\g@sindef(2,1)={447}
+\g@sindef(3,1)={316}
+\g@sindef(4,1)={243}
+\g@sindef(1,0)={0}
+
+\def\g@txtoffdef(#1,#2)=#3%
+   {\expandafter\def\csname txtoff(#1,#2)\endcsname{#3}}
+\def\g@txtoffuse(#1,#2)%
+   {\csname txtoff(#1,#2)\endcsname}
+
+\g@txtoffdef(0,1)={200}
+\g@txtoffdef(1,4)={200}
+\g@txtoffdef(1,3)={200}
+\g@txtoffdef(1,2)={200}
+\g@txtoffdef(2,3)={200}
+\g@txtoffdef(3,4)={200}
+\g@txtoffdef(1,1)={700}
+\g@txtoffdef(4,3)={800}
+\g@txtoffdef(3,2)={900}
+\g@txtoffdef(2,1)={1000}
+\g@txtoffdef(3,1)={2000}
+\g@txtoffdef(4,1)={3000}
+\g@txtoffdef(1,0)={200}
+
+\def\g@joindef(#1,#2)(#3,#4)=#5%
+   {\expandafter\def\csname join(#1,#2)(#3,#4)\endcsname{#5}}
+
+\g@joindef(0,1)(1,0)=\g@joinbr
+\g@joindef(-1,0)(0,-1)=\g@joinbr
+\g@joindef(0,1)(-1,0)=\g@joinbl
+\g@joindef(1,0)(0,-1)=\g@joinbl
+\g@joindef(0,-1)(1,0)=\g@jointr
+\g@joindef(-1,0)(0,1)=\g@jointr
+\g@joindef(0,-1)(-1,0)=\g@jointl
+\g@joindef(1,0)(0,1)=\g@jointl
+
+\def\g@joinbr
+   {{\unitlength\gunitlength
+    \begin{picture}(1000,1000)(-1000,1000)
+        \put(0,0){\oval(2000,2000)[tl]}
+    \end{picture}
+   }}
+\def\g@joinbl
+   {{\unitlength\gunitlength
+    \begin{picture}(1000,1000)(1000,1000)
+        \put(0,0){\oval(2000,2000)[tr]}
+    \end{picture}
+   }}
+\def\g@jointr
+   {{\unitlength\gunitlength
+    \begin{picture}(1000,1000)(-1000,-1000)
+        \put(0,0){\oval(2000,2000)[bl]}
+    \end{picture}
+   }}
+\def\g@jointl
+   {{\unitlength\gunitlength
+    \begin{picture}(1000,1000)(1000,-1000)
+        \put(0,0){\oval(2000,2000)[br]}
+    \end{picture}
+   }}
+
+\def\g@put(#1)#2%
+   {{\unitlength\gunitlength
+     \put(#1){#2}%
+   }}
+
+\g@styledef{node}{empty}{\let\g@putnode\g@putnodeempty}
+\g@styledef{node}{plain}{\let\g@putnode\g@putnodeplain}
+\g@styledef{node}{twin}{\let\g@putnode\g@putnodetwin}
+\g@styledef{node}{bold}{\let\g@putnode\g@putnodebold}
+\g@styledef{node}{boldtwin}{\let\g@putnode\g@putnodeboldtwin}
+\g@styledef{node}{full}{\let\g@putnode\g@putnodefull}
+\g@styledef{node}{fulltwin}{\let\g@putnode\g@putnodefulltwin}
+\g@styledef{node}{start}{\g@styleuse{node}{bold}}
+\g@styledef{node}{final}{\g@styleuse{node}{twin}}
+\g@styledef{node}{startfinal}{\g@styleuse{node}{boldtwin}}
+
+\g@styledef{nodelabel}{0}{\def\g@nloffx{0}\def\g@nloffy{0}\def\g@nlpos{}}
+\g@styledef{nodelabel}{N}{\def\g@nloffx{0}\def\g@nloffy{1200}\def\g@nlpos{b}}
+\g@styledef{nodelabel}{NE}{\def\g@nloffx{800}\def\g@nloffy{800}\def\g@nlpos{bl}}
+\g@styledef{nodelabel}{E}{\def\g@nloffx{1200}\def\g@nloffy{0}\def\g@nlpos{l}}
+\g@styledef{nodelabel}{SE}{\def\g@nloffx{800}\def\g@nloffy{-800}\def\g@nlpos{tl}}
+\g@styledef{nodelabel}{S}{\def\g@nloffx{0}\def\g@nloffy{-1200}\def\g@nlpos{t}}
+\g@styledef{nodelabel}{SW}{\def\g@nloffx{-800}\def\g@nloffy{-800}\def\g@nlpos{tr}}
+\g@styledef{nodelabel}{W}{\def\g@nloffx{-1200}\def\g@nloffy{0}\def\g@nlpos{r}}
+\g@styledef{nodelabel}{NW}{\def\g@nloffx{-800}\def\g@nloffy{800}\def\g@nlpos{br}}
+
+\def\g@loopoff{740}
+\def\g@loopwidth{1200}
+\def\g@halfloopwidth{600}
+\def\g@loopheight{4000}
+\def\g@halfloopheight{2000}
+\g@styledef{loop}{N}%
+   {\def\g@lpoffx{0}%
+    \let\g@lpoffy\g@loopoff
+    \let\g@lpwidth\g@loopwidth
+    \let\g@lpheight\g@loopheight
+    \def\g@lppart{t}%
+    \let\g@lpvoffx\g@halfloopwidth
+    \def\g@lpvoffy{0}%
+    \def\g@lpvdirx{0}%
+    \def\g@lpvdiry{-1}%
+    \def\g@lptoffx{0}%
+    \g@ay\g@halfloopheight
+    \advance\g@ay\g@txtoffuse(1,0)%
+    \edef\g@lptoffy{\the\g@ay}%
+    \def\g@lptpos{b}%
+   }
+\g@styledef{loop}{Nc}%
+   {\g@styleuse{loop}{N}%
+    \edef\g@lpvoffx{-\g@lpvoffx}%
+   }
+\g@styledef{loop}{S}%
+   {\g@styleuse{loop}{Nc}%
+    \edef\g@lpoffy{-\g@lpoffy}%
+    \def\g@lppart{b}%
+    \edef\g@lpvdiry{1}%
+    \edef\g@lptoffy{-\g@lptoffy}%
+    \def\g@lptpos{t}%
+   }
+\g@styledef{loop}{Sc}%
+   {\g@styleuse{loop}{S}%
+    \edef\g@lpvoffx{-\g@lpvoffx}%
+   }
+\g@styledef{loop}{E}%
+   {\def\g@lpoffy{0}%
+    \let\g@lpoffx\g@loopoff
+    \let\g@lpheight\g@loopwidth
+    \let\g@lpwidth\g@loopheight
+    \def\g@lppart{r}%
+    \def\g@lpvoffy{-\g@halfloopwidth}%
+    \def\g@lpvoffx{0}%
+    \def\g@lpvdiry{0}%
+    \def\g@lpvdirx{-1}%
+    \def\g@lptoffy{0}%
+    \g@ax\g@halfloopheight
+    \advance\g@ax\g@txtoffuse(0,1)%
+    \edef\g@lptoffx{\the\g@ax}%
+    \def\g@lptpos{l}%
+   }
+\g@styledef{loop}{Ec}%
+   {\g@styleuse{loop}{E}%
+    \edef\g@lpvoffy{-\g@lpvoffy}%
+   }
+\g@styledef{loop}{W}%
+   {\g@styleuse{loop}{Ec}%
+    \edef\g@lpoffx{-\g@lpoffx}%
+    \def\g@lppart{l}%
+    \edef\g@lpvdirx{1}%
+    \edef\g@lptoffx{-\g@lptoffx}%
+    \def\g@lptpos{r}%
+   }
+\g@styledef{loop}{Wc}%
+   {\g@styleuse{loop}{W}%
+    \edef\g@lpvoffy{-\g@lpvoffy}%
+   }
+
+\g@styledef{edgelabel}{N}{\def\g@elhpos{b}\def\g@elhsign{}}
+\g@styledef{edgelabel}{E}{\def\g@elvpos{l}\def\g@elvsign{}}
+\g@styledef{edgelabel}{S}{\def\g@elhpos{t}\def\g@elhsign{-}}
+\g@styledef{edgelabel}{W}{\def\g@elvpos{r}\def\g@elvsign{-}}
+\g@styledef{edgelabel}{center}{\def\g@edgelabelnum{1}\def\g@edgelabeldenom{2}}
+\g@styledef{edgelabel}{close}{\def\g@edgelabelnum{1}\def\g@edgelabeldenom{4}}
+\g@styledef{edgelabel}{far}{\def\g@edgelabelnum{3}\def\g@edgelabeldenom{4}}
+
+\g@styledef{edge}{directed}{\let\g@endedge\vector}
+\g@styledef{edge}{undirected}{\let\g@endedge\line}
