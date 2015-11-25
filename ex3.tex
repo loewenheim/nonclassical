@@ -18,6 +18,7 @@
 \newcommand{\Lf}{\L_F}
 \newcommand{\Dia}{\Diamond}
 \newcommand{\M}{\mathcal{M}}
+\newcommand{\dom}{\mathrm{dom}}
 
 
 \newtheorem{theorem}{Theorem}
@@ -51,7 +52,7 @@ The set of formulas that are valid in a particular Kripke frame do always form a
 \end{problem*}
 Let $\F$ be a frame and $\L$ the set of formulas valid in $\F$, i.e. valid in every model based on $\F$.
 
-We have to show that $\L$ is closed under substitutions. 
+We have to show that $\L$ is closed under substitutions. Let $F \in \L$, $σ$ a substitution and $\M$ an arbitrary model on $\F$. We have to show that $\M \models Fσ$. Let $\{A_1,…A_n\} = \dom σ ∩ PV(F)$ and $G_i = σ(A_i)$ for $i = 1,…,n$. Let $\M'$ be the model on $\F$ such that $ν_{\M'}(A_i, w) = ν_{\M}(G_i, w)$ for $i = 1,…,n$ and $ν_{\M'}(B, w) = ν_{\M}(B,w)$ for all other propositional variables $B$. By the assumption, $\M' \models F$. It is easy to see that this implies $\M \models Fσ$.
 
 As for MP, let $F, F \imp G \in \L$ and fix a structure $\M$ on $\F$ and a world $w \in \M$. Clearly, $(\M, w) \models F$ and $(\M, w) \models F \imp G$. By the propositional semantics of $\imp$, $(\M, w) \models G$ must hold as well. Since $\M$ and $w$ were arbitrary, it follows that $G \in \L$.
 
