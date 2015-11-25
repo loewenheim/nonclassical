@@ -1,0 +1,93 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{uniinput}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\usepackage{gslist}
+\usepackage{gsgraph}
+
+\newcommand{\imp}{\supset}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\K}{\textbf{K}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\Ib}{\I_{¬ F}}
+\newcommand{\It}{\I_{F}}
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\Lf}{\L_F}
+\newcommand{\Dia}{\Diamond}
+\newcommand{\M}{\mathcal{M}}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem*{problem*}{Problem}
+
+\theoremstyle{definition}
+
+\newtheorem{definition}[theorem]{Definition}
+
+\title{NCL exercises 3}
+\author{Sebastian Zivota}
+
+\begin{document}
+\maketitle
+
+\section*{Exercise 14}
+
+\begin{problem*}
+Show that the intersection of two logics is also a logic.
+What about unions of logics?
+
+\end{problem*}
+Let $\L_1, \L_2$ be logics and $\L = \L_1 ∪ \L_2$. If $F \in \L$, then $F \in \L_i$ and hence $Fσ \in \L_i$ for any substitution $σ$ and $i = 1,2$. Therefore $F \in \L$.\\
+Let $F, F \imp G \in \L$. Then $F, F \imp G \in \L_i$ and hence $G \in \L_i$ because $\L_i$ are logics. It follows that $G \in \L$.
+
+The union of logics need not be a logic: Let $\L_1 = \{ϕ ∧ ψ \}, \L_2 = \{(ϕ ∧ ψ) \imp ¬ρ \}$, where $ϕ, ψ, ρ$ are arbitrary formulas. They are both trivially closed under substitution and modus ponens ($\L_1$ contains no implications, while $\L_2$ contains only implications with conjunctions as premises). Since $A ∧ B \in \L_1$ and $(A ∧ B) \imp ¬ C \in \L_2$, if their union were a logic, it would have to contain $¬C$. But since neither logic contains negations, this is not the case.
+\section*{Exercise 16}
+\begin{problem*}
+The set of formulas that are valid in a particular Kripke frame do always form a logic extending CL. Prove this fact.
+\end{problem*}
+Let $\F$ be a frame and $\L$ the set of formulas valid in $\F$, i.e. valid in every model based on $\F$.
+
+We have to show that $\L$ is closed under substitutions. 
+
+As for MP, let $F, F \imp G \in \L$ and fix a structure $\M$ on $\F$ and a world $w \in \M$. Clearly, $(\M, w) \models F$ and $(\M, w) \models F \imp G$. By the propositional semantics of $\imp$, $(\M, w) \models G$ must hold as well. Since $\M$ and $w$ were arbitrary, it follows that $G \in \L$.
+
+\section{Exercise 19}
+\begin{problem*}
+ Prove these facts:
+ \begin{enumerate}
+  \item $\M \models F \Rightarrow \M \models \Box F$
+  \item $\F \models F \Rightarrow \F \models \Box F$
+ \end{enumerate}
+\end{problem*}
+
+\begin{enumerate}
+ \item Let $\M \models F$ and $w$ a world in $\M$. Since $\M \models F$, we know that $(\M, w') \models F$ for each $w' \in \M$ and hence certainly for each $w'$ that is reachable from $w$. In other words, $(\M, w) \models \Box F$ and, since $w$ was arbitrary, $\M \models \Box F$.
+ \item Let $\F \models F$ and $\M$ an arbitrary structure on $\F$. Since $\M \models F$, by 1) we obtain $\M \models \Box F$. Since $\M$ was arbitrary, this entails $\F \models \Box F$.
+\end{enumerate}
+
+
+\section{Exercise 20}
+\begin{problem*}
+ Prove the soundness of $\K$ (i.e. $\K \subseteq \L := \{A \ |\  \forall F: \F \models A\}$) using mentioned facts.
+\end{problem*}
+
+We need to show that
+\begin{enumerate}
+ \item all propositional tautologies are in $\L$;
+ \item the schema $(K) := \Box(A \imp B) \imp (\Box A \imp \Box B)$ is in $\L$;
+ \item $\L$ is closed under MP and necessitation.
+\end{enumerate}
+
+Proof:
+\begin{enumerate}
+ \item Any propositional tautology holds in every possible propositional structure and hence in every world of every model on every frame.
+ \item Let $\F$ an arbitrary frame, $\M$ a structure on $\F$ and $w \in \M$. We need to show that $(\M, w) \models (K)$. Suppose $(\M, w) \models \Box(A\imp B)$. This means that for all $w'$ accessible from $w$, $(\M, w') \models A \imp B$. If $(\M, w) \models \Box A$, then for each such $w'$, $(\M, w') \models A$ as well. It follows that $(\M, w') \models B$ and hence $(\M, w) \models \Box B$.
+ \item These follow from exercises 16 and 19, respectively.
+\end{enumerate}
+
+
+\end{document}
