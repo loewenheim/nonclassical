@@ -1,0 +1,103 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{uniinput}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\usepackage{gslist}
+\usepackage{gsgraph}
+
+\newcommand{\imp}{\supset}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\K}{\textbf{K}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\Ib}{\I_{¬ F}}
+\newcommand{\It}{\I_{F}}
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\Lf}{\L_F}
+\newcommand{\Dia}{\Diamond}
+\newcommand{\M}{\mathcal{M}}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem*{problem*}{Problem}
+
+\theoremstyle{definition}
+
+\newtheorem{definition}[theorem]{Definition}
+
+\title{NCL exercises 6}
+\author{Sebastian Zivota}
+
+\begin{document}
+\maketitle
+
+\section*{Exercise 46}
+
+\begin{problem*}
+Show that the following formulas are BHK-valid:
+
+\begin{enumerate}
+  \setcounter{enumi}{2}
+ \item $A ∧ B \imp B ∧ A$
+\item $A ∨ B \imp B ∨ A$
+\item $A \imp (B \imp A)$
+\item $\bot \imp A$
+\end{enumerate}
+\end{problem*}
+\begin{enumerate}
+\setcounter{enumi}{2}
+ \item $π \triangleright \{A ∧ B \imp B ∧ A \}$ means that $π$ is an algorithm $μ$ that transforms a proof $δ \triangleright \{A ∧ B\}$ into a proof $ρ \triangleright \{B ∧ A\}$. $δ \triangleright \{A ∧ B\}$ in turn means $δ = (α,β)$ with $α \triangleright \{A\}, β \triangleright \{B\}$. 
+ Obviously, $(β,α) \triangleright B ∧ A$, so we can just let $μ$ be the function that swaps a pair.
+ \item We are again looking for a function. Let $μ = \begin{cases}
+                                                            (left, α)&\mapsto (right,α),\\
+                                                            (right,β)&\mapsto (left,β)
+                                                           \end{cases}$.
+\item We need an algorithm that, given a proof of $A$, returns another algorithm that transforms any proof of $B$ into a proof of $A$. The lambda term $\mathbf{K}=λx.λy.x$ describes such an algorithm. Expressed in natural language,
+given a proof $δ$ of $A$ we can simply transform any proof $ρ$ of $B$ into $δ$.
+\item We need an algorithm that can transform any proof of $\bot$ into a proof of $A$. $\mathbf{I} = \lambda x.x$ is such an algorithm: since there are no proofs of $\bot$, the required property is trivially fulfilled.
+ \end{enumerate}
+
+\section*{Exercise 47}
+
+\begin{problem*}
+Show that the following formulas are BHK-valid:
+
+\begin{enumerate}
+  \setcounter{enumi}{6}
+ \item $(A \imp (B \imp C)) \imp ((A ∧ B) \imp C)$
+\item $¬(A ∨ B) \imp ¬A ∧ ¬B$
+\item $(A ∧(B ∨ C)) \imp ((A ∧ B) ∨ (A ∧ C))$
+\item $((A ∧ B) ∨ (A ∧ C)) \imp (A ∧(B ∨ C))$
+\end{enumerate}
+\end{problem*}
+\begin{enumerate}
+\setcounter{enumi}{6}
+ \item We start with a function $δ$ that, for any proof $α \triangleright \{A\}$, produces another algorithm $δ(α)$ that transforms a proof $β \triangleright \{B\}$ into a proof $γ \triangleright \{C\}$. We need an algorithm that
+ transforms $(α,β)$ into $γ$. $(α,β) \mapsto δ(α)(β)$ achieves this. In other words, we uncurry the function $δ$.
+ \item Suppose we have an algorithm $δ$ that tranforms any proof of $A ∨ B$---that is, any $(left, α)$ with $α \triangleright \{A\}$ or $(right,β)$ with $β \triangleright \{B\}$---into a proof of $\bot$. Let $ρ_1 = λx.δ (left,x)$ and $ρ_2 =
+ λx.δ (right, x)$. Then $ρ = (ρ_1,ρ_2)$ is the solution. This works just as well if the negation is replaced with $\imp C$.
+ \item The solution is the function $(α,(σ,δ)) \mapsto (σ, (α, δ))$.
+\item The solution is $(σ,(α,δ)) \mapsto (α,(σ,δ))$, i.e. the inverse of the previous function.
+ \end{enumerate}
+
+ \section*{Exercise 48}
+ \begin{problem*}
+  Argue informally that the following formulas are intuitionistically invalid:
+  \begin{enumerate}
+  \item $¬(A∧B) \imp (¬A ∨ ¬B)$
+   \item $¬\forall x A(x) \imp \exists x ¬A(x)$
+   \item $((A \imp B) ∧ (¬A \imp B)) \imp B$
+  \end{enumerate}
+ \end{problem*}
+\begin{enumerate}
+\item This fails due to the effective nature of disjunction. The right-hand side asserts that one of $A$ and $B$ is false and we know which one. In general, there is no way to decide which one given just a proof that they cannot both be true.
+  \item The validity of this formula seems to rest on the law of excluded middle: we can deduce $B$ from both $A$ and $¬A$, so since one of them must be true, so must $B$. Since the LEM is not intuitionistically valid, this argument doesn't work.
+ \item $¬\forall x A(x)$ says that it is impossible for all elements to satisfy $A$. $\exists x ¬A(x)$ asserts that we can in fact construct a concrete element that doesn't satisfy $A$, which intuitionistically is stronger.
+\end{enumerate}
+
+
+
+\end{document}
