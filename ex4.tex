@@ -1,0 +1,66 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{uniinput}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\usepackage{gslist}
+\usepackage{gsgraph}
+
+\newcommand{\imp}{\supset}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\K}{\textbf{K}}
+\renewcommand{\S}[1]{\textbf{S#1}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\Ib}{\I_{¬ F}}
+\newcommand{\It}{\I_{F}}
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\Lf}{\L_F}
+\newcommand{\Dia}{\Diamond}
+\newcommand{\M}{\mathcal{M}}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem*{problem*}{Problem}
+
+\theoremstyle{definition}
+
+\newtheorem{definition}[theorem]{Definition}
+
+\title{NCL exercises 4}
+\author{Sebastian Zivota}
+
+\begin{document}
+\maketitle
+
+\section*{Exercise 31}
+
+\begin{problem*}
+Explain why $\S5$ is sound and complete for frames where accessibility is an equivalence relation, using the following theorem:
+
+\begin{theorem}
+ The normal modal logic with axioms $\{A_{i_1},…,A_{i_n}\} \subseteq \{A_1,…,A_{10}\}$ is sound and complete for frames where the accessibility relation satisfies the corresponding properties $\{E_{i_1},…,E_{i_n}\}$.
+\end{theorem}
+\end{problem*}
+By the theorem, \S5 is sound and complete for reflexive Euclidean frames. Thus, we need to show that a relation is an equivalence iff it is reflexive and Euclidean.
+
+Assume $R$ is reflexive and Euclidean and let $u {R}v$. Because of reflexivity, $u {R} u$ and together with the Euclidean property we obtain $v {R} u$, so $R$ is symmetric. Now let $u {R} v$ and $v {R} w$. We already know $R$ to be symmetric, so $v {R} u$. From $v {R} u$ and $v {R} w$ we deduce $u {R} w$, so $R$ is transitive.
+
+Now assume $R$ is an equivalence relation and let $u {R} v$ and $u {R} w$. Because of symmetry we have $v {R} w$ and because of transitivity we obtain $v {R} w$.
+\section*{Exercise 32}
+\begin{problem*}
+Prove: For every frame $\F$, $R_1 \subseteq R_2$ iff $\Box_2 A \imp \Box_1 A$ is valid in $\F$.
+\end{problem*}
+Assume $R_1 \subseteq R_2$. Let $\M$ be a model on $\F$ and $w$ a world in $\M$. Assume $(\M, w) \models \Box_2 A$. We need to show $(\M, w) \models \Box_1 A$, which means that for every $w'$ with $w {R_1} w'$, $(\M, w') \models A$. Since $R_1 \subseteq R_2$, $w {R_2} w'$ and hence $(\M, w) \models \Box_1 A$.
+
+Now assume $R_1 \not \subseteq R_2$, i.e. there are $w, w' \in \F$ with $(w,w') \in R_1\setminus R_2$. Construct a model $\M$ on $\F$ as follows:
+\begin{align*}
+ν_{\M}(A, v) =\begin{cases}
+	      0, &v = w',\\
+	      1, &\text{otherwise.}
+              \end{cases}
+\end{align*}
+Note that by this definition, $ν_{\M}(A,v) = 1$ for all $v$ such that $w{R_2}v$. Now we have $(\M, w) \models \Box_2 A$ and $(\M, w) \not \models \Box_1 A$, so $\Box_2 A \imp \Box_1 A$ is not valid in $\M$ and hence not in $\F$ either.
+\end{document}
