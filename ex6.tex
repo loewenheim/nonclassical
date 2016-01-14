@@ -87,15 +87,19 @@ Show that the following formulas are BHK-valid:
  \begin{problem*}
   Argue informally that the following formulas are intuitionistically invalid:
   \begin{enumerate}
+  \item $¬¬A \imp A$
+  \item $(A \imp B)  ∨ (B \imp A)$
   \item $¬(A∧B) \imp (¬A ∨ ¬B)$
    \item $¬\forall x A(x) \imp \exists x ¬A(x)$
    \item $((A \imp B) ∧ (¬A \imp B)) \imp B$
   \end{enumerate}
  \end{problem*}
 \begin{enumerate}
-\item This fails due to the effective nature of disjunction. The right-hand side asserts that one of $A$ and $B$ is false and we know which one. In general, there is no way to decide which one given just a proof that they cannot both be true.
-  \item The validity of this formula seems to rest on the law of excluded middle: we can deduce $B$ from both $A$ and $¬A$, so since one of them must be true, so must $B$. Since the LEM is not intuitionistically valid, this argument doesn't work.
- \item $¬\forall x A(x)$ says that it is impossible for all elements to satisfy $A$. $\exists x ¬A(x)$ asserts that we can in fact construct a concrete element that doesn't satisfy $A$, which intuitionistically is stronger.
+\item $¬¬A$ intuitively means ``every proof that $A$ is absurd is itself absurd''. This does not give any indication how we would obtain a proof of $A$. An alternative argument: Given double-negation elimination, it is not very hard to derive the law of excluded middle, which we know is not valid.
+\item If this formula were valid, then one of its disjuncts would already be valid (and we would know which one), which is obviously not the case.
+\item The left-hand side asserts that the combination of $A$ and $B$ is absurd (leads to a contradiction), while the right-hand side asserts that either $A$ or $B$ already leads to a contradiction on its own (and we know which one it is). This is obviously much stronger than the left-hand side.
+ \item This the first-order version of the previous example. $¬\forall x A(x)$ says that it is absurd that all elements satisfy $A$. $\exists x ¬A(x)$ asserts that we can in fact construct a concrete element such that it is absurd that that element satisfies $A$, which intuitionistically is stronger.
+ \item This formula corresponds to an argument of the form ``if $A$ is true, we can deduce $B$, and if $A$ is false, we can also deduce $B$. Therefore $B$''. This presupposes that $A$ is either true or false, i.e. the law of excluded middle, which we know is false.
 \end{enumerate}
 
 
